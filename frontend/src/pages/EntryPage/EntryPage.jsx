@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 function EntryPage({ socket, socketInfo, setSocketInfo }) {
   const navigate = useNavigate();
   useEffect(() => {
-    socket.on("deliverSocketInfo", ({ gameId, playerName }) => {
+    socket.on("deliverSocketInfo", ({ gameId, playerName, playerId }) => {
       if (gameId) {
-        setSocketInfo({ gameId: gameId, playerName: playerName });
+        setSocketInfo({
+          gameId: gameId,
+          playerName: playerName,
+          playerId: playerId,
+        });
       }
     });
 

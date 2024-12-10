@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
     socket.emit("deliverSocketInfo", {
       gameId: socket.gameId,
       playerName: socket.playerName,
+      playerId: socket.id,
     });
   });
 
@@ -79,7 +80,7 @@ io.on("connection", (socket) => {
     } else if (!games[gameId]) {
       socket.emit("error", "Game not found.");
       return;
-    } else if (games[gameId].isStarted) {
+    } else if (games[gameId].status !== "not_started") {
       socket.emit("error", "Game has already started.");
       return;
     } else if (!playerName) {
@@ -175,6 +176,9 @@ io.on("connection", (socket) => {
     } else if (games[socket.gameId].status === "not_started") {
       socket.emit("error", "Game has not started yet");
       return;
+    } else if (games[socket.gameId].status != "waiting_choices") {
+      socket.emit("error", "Game is not in the waiting_choices state");
+      return;
     } else if (!choice || !["left", "right"].includes(choice)) {
       socket.emit("error", "You must choose either 'left' or 'right'");
       return;
@@ -209,10 +213,8 @@ io.on("connection", (socket) => {
       return;
     }
     const loserChoice = Math.random() < 0.5 ? "left" : "right";
-    const players = Array.from(
-      io.sockets.adapter.rooms.get(socket.gameId) || []
-    );
-    const activePlayers = players.filter((socketId) => {
+    let players = Array.from(io.sockets.adapter.rooms.get(socket.gameId) || []);
+    let activePlayers = players.filter((socketId) => {
       const player = io.sockets.sockets.get(socketId);
       return player && !player.isEliminated;
     });
@@ -224,29 +226,46 @@ io.on("connection", (socket) => {
           `${player.playerName} has been eliminated`
         );
         player.isEliminated = true;
+        player.emit("eliminated", "You have been eliminated");
         games[socket.gameId].rankings.push(player.playerName);
       }
       if (player) delete player.choice;
-      activePlayers = players.filter((socketId) => {
-        const player = io.sockets.sockets.get(socketId);
-        return player && !player.isEliminated;
-      });
-      if (activePlayers.length === 1) {
-        games[socket.gameId].setWinner(activePlayers[0].playerName);
-        io.in(socket.gameId).emit(
-          "gameEnded",
-          `Game ended. Winner: ${activePlayers[0].playerName}`
-        );
-        console.log(`Game ended. Winner: ${activePlayers[0].playerName}`);
-        games[socket.gameId].status = "ended";
-        games[socket.gameId].rankings.push(activePlayers[0].playerName);
-      } else if (activePlayers.length === 0) {
-        io.in(socket.gameId).emit("gameEnded", "Game ended. No winners");
-        console.log("Game ended. No winners");
-        games[socket.gameId].status = "ended";
-      }
-      games[socket.gameId].status = "elimination";
     });
+
+    players = Array.from(io.sockets.adapter.rooms.get(socket.gameId) || []);
+    activePlayers = players.filter((socketId) => {
+      const player = io.sockets.sockets.get(socketId);
+      return player && !player.isEliminated;
+    });
+    if (activePlayers.length === 1) {
+      console.log(activePlayers);
+      games[socket.gameId].setWinner(
+        io.sockets.sockets.get(activePlayers[0]).playerName
+      );
+      io.in(socket.gameId).emit(
+        "gameEnded",
+        `Game ended. Winner: ${
+          io.sockets.sockets.get(activePlayers[0]).playerName
+        }`
+      );
+      console.log(
+        `Game ended. Winner: ${
+          io.sockets.sockets.get(activePlayers[0]).playerName
+        }`
+      );
+      games[socket.gameId].status = "ended";
+      games[socket.gameId].rankings.push(
+        io.sockets.sockets.get(activePlayers[0]).playerName
+      );
+    } else if (activePlayers.length === 0) {
+      io.in(socket.gameId).emit("gameEnded", "Game ended. No winners");
+      console.log("Game ended. No winners");
+      games[socket.gameId].status = "ended";
+    }
+    if (games[socket.gameId].status !== "ended") {
+      games[socket.gameId].status = "elimination";
+      io.in(socket.gameId).emit("refreshGameInfo");
+    }
   });
 
   socket.on("nextRound", () => {
@@ -266,6 +285,7 @@ io.on("connection", (socket) => {
     game.status = "waiting_choices";
     io.in(socket.gameId).emit("roundStarted", `Round ${game.round} started`);
     console.log(`Round ${game.round} started`);
+    io.in(socket.gameId).emit("refreshGameInfo");
   });
 
   socket.on("removeGame", () => {

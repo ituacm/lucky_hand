@@ -7,6 +7,8 @@ import "./App.css";
 import EntryPage from "./pages/EntryPage/EntryPage.jsx";
 import { io } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
+import GamePage from "./pages/GamePage/GamePage.jsx";
+import { Game } from "../../backend/gameLogic.js";
 
 function App() {
   const [socketInfo, setSocketInfo] = useState({
@@ -40,7 +42,17 @@ function App() {
         />
       ),
     },
-    { path: "/:gameId", element: <>Game</> },
+    {
+      path: "/:gameId",
+      element: (
+        <GamePage
+          socket={socketRef.current}
+          socketInfo={socketInfo}
+          setSocketInfo={setSocketInfo}
+        />
+      ),
+      loader: () => (socketInfo.gameId ? null : redirect("/")),
+    },
     {
       path: "*",
       loader: () => redirect("/"),
