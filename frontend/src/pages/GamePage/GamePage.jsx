@@ -4,6 +4,7 @@ import axios from "axios";
 import { redirect, useParams } from "react-router-dom";
 import WaitingChoices from "../../components/WaitingChoices/WaitingChoices";
 import Elimination from "../../components/Elimination/Elimination";
+import GameOver from "../../components/Game Over/GameOver";
 
 function GamePage({ socket, socketInfo, setSocketInfo }) {
   const [gameInfo, setGameInfo] = useState({});
@@ -64,11 +65,10 @@ function GamePage({ socket, socketInfo, setSocketInfo }) {
           isELiminated={isEliminated}
           socket={socket}
           isAdmin={gameInfo && gameInfo.creatorId === socketInfo.playerId}
+          socketInfo={socketInfo}
         />
       )}
-      {gameInfo.status === "ended" && (
-        <h1>Game Over. Winner:{gameInfo.rankings.slice(-1)}</h1>
-      )}
+      {gameInfo.status === "ended" && <GameOver gameInfo={gameInfo} />}
     </div>
   );
 }

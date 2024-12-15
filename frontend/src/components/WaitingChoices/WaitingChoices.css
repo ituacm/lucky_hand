@@ -2,10 +2,22 @@
     display:flex;
     flex-direction:column;
     align-items: center;
+    background-color: #f0f0f0;
+    width: 20rem;
+    border-radius: 0.5rem;
 }
 
 .waiting-choices-buttons{
     display:flex;
     justify-content: space-between;
-    width:7rem;
+}
+
+.waiting-choices-button{
+    font-size: 1.5rem;
+    width: 6rem;
+    text-align: center;
+}
+
+.waiting-choices-header{
+    margin: 0.2rem;
 }

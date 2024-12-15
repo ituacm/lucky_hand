@@ -237,26 +237,39 @@ io.on("connection", (socket) => {
       const player = io.sockets.sockets.get(socketId);
       return player && !player.isEliminated;
     });
-    if (activePlayers.length === 1) {
+    if (activePlayers.length <= 1) {
       console.log(activePlayers);
-      games[socket.gameId].setWinner(
-        io.sockets.sockets.get(activePlayers[0]).playerName
-      );
+      if (activePlayers.length === 1) {
+        games[socket.gameId].setWinner(
+          io.sockets.sockets.get(activePlayers[0]).playerName
+        );
+        games[socket.gameId].rankings.push(
+          io.sockets.sockets.get(activePlayers[0]).playerName
+        );
+      } else {
+        games[socket.gameId].setWinner(
+          games[socket.gameId].rankings[
+            games[socket.gameId].rankings.length - 1
+          ]
+        );
+      }
+
       io.in(socket.gameId).emit(
         "gameEnded",
         `Game ended. Winner: ${
-          io.sockets.sockets.get(activePlayers[0]).playerName
+          games[socket.gameId].rankings[
+            games[socket.gameId].rankings.length - 1
+          ]
         }`
       );
       console.log(
         `Game ended. Winner: ${
-          io.sockets.sockets.get(activePlayers[0]).playerName
+          games[socket.gameId].rankings[
+            games[socket.gameId].rankings.length - 1
+          ]
         }`
       );
       games[socket.gameId].status = "ended";
-      games[socket.gameId].rankings.push(
-        io.sockets.sockets.get(activePlayers[0]).playerName
-      );
     } else if (activePlayers.length === 0) {
       io.in(socket.gameId).emit("gameEnded", "Game ended. No winners");
       console.log("Game ended. No winners");
@@ -353,6 +366,7 @@ app.get("/games/:id/players", (req, res) => {
           id: socketId,
           name: socket.playerName,
           gameId: socket.gameId,
+          isEliminated: socket.isEliminated,
         });
       }
     }
@@ -373,6 +387,7 @@ app.get("/players", async (req, res) => {
       id: socketId,
       name: socket.playerName,
       gameId: socket.gameId,
+      isEliminated: socket.isEliminated,
     });
   }
   res.json(players);

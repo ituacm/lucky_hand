@@ -8,7 +8,6 @@ import EntryPage from "./pages/EntryPage/EntryPage.jsx";
 import { io } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 import GamePage from "./pages/GamePage/GamePage.jsx";
-import { Game } from "../../backend/gameLogic.js";
 
 function App() {
   const [socketInfo, setSocketInfo] = useState({

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import "./CreateGame.css";
 
-function CreateGame({ socket }) {
+function CreateGame({ socket, setIsJoining }) {
   const gameNameRef = useRef();
   const playerNameRef = useRef();
 
@@ -16,17 +16,44 @@ function CreateGame({ socket }) {
   return (
     <div className="create-game-container">
       <h1>Create Game</h1>
+      <p className="create-game-text">
+        Create a game room and invite your fellas
+      </p>
       <form className="create-game-form-container" onSubmit={handleSubmit}>
-        <label>
-          Game Name:
-          <input type="text" name="gameName" ref={gameNameRef} />
+        <label className="create-game-form-label">
+          Game Name
+          <input
+            type="text"
+            name="gameName"
+            ref={gameNameRef}
+            className="create-game-form-input"
+            required
+          />
         </label>
-        <label>
-          Player Name:
-          <input type="text" name="playerName" ref={playerNameRef} />
+        <label className="create-game-form-label">
+          Player Name
+          <input
+            type="text"
+            name="playerName"
+            ref={playerNameRef}
+            className="create-game-form-input"
+            required
+          />
         </label>
-        <input type="submit" value="Create Game" />
+        <input
+          type="submit"
+          value="Create Game"
+          className="create-game-form-submit"
+        />
       </form>
+      <p
+        className="create-game-redirect"
+        onClick={() => {
+          setIsJoining(true);
+        }}
+      >
+        Wanna join an existing game room?
+      </p>
     </div>
   );
 }

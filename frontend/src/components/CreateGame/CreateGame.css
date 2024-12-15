@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  width: 25vw;
+  background-color: #f0f0f0;
+  border-radius: 0.5rem;
 }
 
 .create-game-form-container{
@@ -10,4 +12,54 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.create-game-text{
+  width:85%;
+  font-size: 1rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.create-game-form-label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.8;
+  width: 85%;
+}
+
+.create-game-form-input{
+  border-radius: 0.3rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  background-color: #dddddd;
+  border: none;
+  padding: 0.5rem;
+  font-weight: 300;
+}
+
+.create-game-form-submit{
+  padding: 0.5rem 0;
+  background-color: var(--color-primary);
+  border:none;
+  border-radius: 0.3rem;
+  color: #fff;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  width: 85%;
+  cursor: pointer;
+}
+
+.create-game-redirect{
+  width: 85%;
+  font-size: 1rem;
+  color: var(--color-secondary);
+  text-align: center;
+  margin:0.3rem 0;
+  cursor: pointer;
 }

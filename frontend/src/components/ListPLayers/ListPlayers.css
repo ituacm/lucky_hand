@@ -1,0 +1,28 @@
+.list-players-container{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    align-items: center;
+    max-width: 80%;
+    min-width: 30%;
+}
+
+.list-players-header{
+    margin: 0.2rem;
+}
+
+.list-players{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.list-player{
+    background-color: var(--color-primary);
+    color: #f0f0f0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin:0.3rem;
+}

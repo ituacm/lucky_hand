@@ -1,8 +1,23 @@
 .App{
-    background-color: #ccdbdc;
+    background-color: var(--color-primary);
     display: flex;
     justify-content: center;
     align-items: center;
     width:100vw;
     height:100vh;
+}
+
+.primary-button{
+    background-color: var(--color-primary);
+    color: #f0f0f0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin:0.3rem;
+    border:none;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.primary-button:hover{
+    background-color: var(--color-secondary);
 }

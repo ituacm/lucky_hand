@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./EntryPage.css";
 import CreateGame from "../../components/CreateGame/CreateGame";
 import JoinGame from "../../components/JoinGame/JoinGame";
 import { useNavigate } from "react-router-dom";
 
 function EntryPage({ socket, socketInfo, setSocketInfo }) {
+  const [isJoining, setIsJoining] = useState(true);
   const navigate = useNavigate();
   useEffect(() => {
     socket.on("deliverSocketInfo", ({ gameId, playerName, playerId }) => {
@@ -33,8 +34,11 @@ function EntryPage({ socket, socketInfo, setSocketInfo }) {
   });
   return (
     <div className="entry-page-container">
-      <CreateGame socket={socket} />
-      <JoinGame socket={socket} />
+      {isJoining ? (
+        <JoinGame socket={socket} setIsJoining={setIsJoining} />
+      ) : (
+        <CreateGame socket={socket} setIsJoining={setIsJoining} />
+      )}
     </div>
   );
 }
