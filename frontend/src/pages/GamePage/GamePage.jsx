@@ -5,6 +5,7 @@ import { redirect, useParams } from "react-router-dom";
 import WaitingChoices from "../../components/WaitingChoices/WaitingChoices";
 import Elimination from "../../components/Elimination/Elimination";
 import GameOver from "../../components/Game Over/GameOver";
+import "./GamePage.css";
 
 function GamePage({ socket, socketInfo, setSocketInfo }) {
   const [gameInfo, setGameInfo] = useState({});
