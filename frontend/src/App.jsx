@@ -17,7 +17,7 @@ function App() {
   const socketRef = useRef();
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   useEffect(() => {
-    socketRef.current = io("http://127.0.0.1:8080/");
+    socketRef.current = io(import.meta.env.VITE_BACKEND_WS_URL);
     socketRef.current.on("connect", () => {
       console.log("Connected to server");
       setIsSocketConnected(true);
