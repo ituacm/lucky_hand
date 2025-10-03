@@ -17,7 +17,7 @@ function App() {
   const socketRef = useRef();
   const [isSocketConnected, setIsSocketConnected] = useState(false);
   useEffect(() => {
-    socketRef.current = io(import.meta.env.VITE_BACKEND_WS_URL);
+    socketRef.current = io(import.meta.env.VITE_BACKEND_URL);
     socketRef.current.on("connect", () => {
       console.log("Connected to server");
       setIsSocketConnected(true);

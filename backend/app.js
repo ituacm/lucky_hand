@@ -26,6 +26,7 @@ const io = new Server(server, {
     allowedHeaders: ["my-custom-header"],
     credentials: true,
   },
+  transports: ['websocket'], withCredentials: true
 });
 
 const games = {};
