@@ -1,0 +1,23 @@
+services:
+  app:
+    image: ituacm-website:latest
+    # Eğer lokalden imaj inşa edeceksen:
+    build:
+      context: .
+
+    # Konteynerin iç portu 80 ise, host'ta 127.0.0.1:4000 üzerinden erişilir
+    ports:
+      - "127.0.0.1:4006:80"
+
+    # İsteğe bağlı: konteyner sağlığını kontrol etmek için
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+    # Kendi ihtiyacın varsa .env kullanabilirsin
+    env_file:
+      - .env
+
+    restart: unless-stopped

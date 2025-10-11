@@ -15,7 +15,7 @@ function GamePage({ socket, socketInfo, setSocketInfo }) {
   const fetchGameInfo = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}games/${socketInfo.gameId}`
+        `${import.meta.env.VITE_BACKEND_URL}/games/${socketInfo.gameId}`
       );
       setGameInfo(response.data);
       console.log(response.data);

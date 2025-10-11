@@ -7,7 +7,7 @@ function ListPlayers({ players, header, ranking = false }) {
       {header && <h2 className="list-players-header">{header}</h2>}
       <div div className="list-players">
         {players.map((player, index) => (
-          <p className="list-player">
+          <p key={index} className="list-player">
             {ranking ? `${index + 1}- ` : null}
             {player.name ? player.name : player}
           </p>

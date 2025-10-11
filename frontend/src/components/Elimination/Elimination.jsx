@@ -10,7 +10,7 @@ function Elimination({ isELiminated, isAdmin, socket, socketInfo }) {
   const fetchPlayers = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}games/${socketInfo.gameId}/players`
+        `${import.meta.env.VITE_BACKEND_URL}/games/${socketInfo.gameId}/players`
       );
       setPlayers(response.data);
     } catch (err) {
