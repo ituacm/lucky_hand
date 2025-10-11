@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./WaitingChoices.css";
 
 function WaitingChoices({
@@ -9,6 +9,17 @@ function WaitingChoices({
   isEliminated,
 }) {
   const [madeChoice, setMadeChoice] = useState(false);
+
+  useEffect(() => {
+    socket.on("error", (error) => {
+      console.error("Waiting choices error:", error);
+      alert(`Game Error: ${error}`);
+    });
+
+    return () => {
+      socket.off("error");
+    };
+  }, [socket]);
   return (
     <div className="waiting-choices-container">
       <h1 className="waiting-choices-header">Round {gameInfo.round}</h1>
@@ -23,8 +34,13 @@ function WaitingChoices({
             <button
               className="primary-button waiting-choices-button"
               onClick={() => {
-                socket.emit("makeChoice", { choice: "left" });
-                setMadeChoice(true);
+                try {
+                  socket.emit("makeChoice", { choice: "left" });
+                  setMadeChoice(true);
+                } catch (err) {
+                  console.error("Error making choice:", err);
+                  alert(`Failed to make choice: ${err.message || err}`);
+                }
               }}
             >
               Left
@@ -32,8 +48,13 @@ function WaitingChoices({
             <button
               className="primary-button waiting-choices-button"
               onClick={() => {
-                socket.emit("makeChoice", { choice: "right" });
-                setMadeChoice(true);
+                try {
+                  socket.emit("makeChoice", { choice: "right" });
+                  setMadeChoice(true);
+                } catch (err) {
+                  console.error("Error making choice:", err);
+                  alert(`Failed to make choice: ${err.message || err}`);
+                }
               }}
             >
               Right
@@ -45,7 +66,12 @@ function WaitingChoices({
         <button
           className="primary-button"
           onClick={() => {
-            socket.emit("eliminatePlayers");
+            try {
+              socket.emit("eliminatePlayers");
+            } catch (err) {
+              console.error("Error eliminating players:", err);
+              alert(`Failed to eliminate players: ${err.message || err}`);
+            }
           }}
         >
           Eliminate

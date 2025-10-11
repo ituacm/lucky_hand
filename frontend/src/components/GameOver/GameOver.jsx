@@ -16,7 +16,12 @@ function GameOver({ gameInfo }) {
       <button
         className="primary-button"
         onClick={() => {
-          window.location.href = "/";
+          try {
+            window.location.href = "/";
+          } catch (err) {
+            console.error("Error navigating to entry page:", err);
+            alert(`Failed to navigate: ${err.message || err}`);
+          }
         }}
       >
         Return to entry page

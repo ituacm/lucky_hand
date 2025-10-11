@@ -18,12 +18,18 @@ function EntryPage({ socket, socketInfo, setSocketInfo }) {
       }
     });
 
+    socket.on("error", (error) => {
+      console.error("Entry page error:", error);
+      alert(`Error: ${error}`);
+    });
+
     if (socketInfo.gameId) {
       navigate(`/${socketInfo.gameId}`);
     }
 
     return () => {
       socket.off("deliverSocketInfo");
+      socket.off("error");
     };
   }, [socketInfo]);
 

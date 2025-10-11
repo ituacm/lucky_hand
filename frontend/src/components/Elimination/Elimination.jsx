@@ -15,6 +15,7 @@ function Elimination({ isELiminated, isAdmin, socket, socketInfo }) {
       setPlayers(response.data);
     } catch (err) {
       console.error(err);
+      alert(`Failed to fetch players: ${err.response?.data || err.message || err}`);
     }
   };
   useEffect(() => {
@@ -22,6 +23,17 @@ function Elimination({ isELiminated, isAdmin, socket, socketInfo }) {
     setSurvivedPlayers(players.filter((player) => !player.isEliminated));
     setEliminatedPlayers(players.filter((player) => player.isEliminated));
   }, [players]);
+
+  useEffect(() => {
+    socket.on("error", (error) => {
+      console.error("Elimination error:", error);
+      alert(`Elimination Error: ${error}`);
+    });
+
+    return () => {
+      socket.off("error");
+    };
+  }, [socket]);
 
   return (
     <div className="elimination-container">
@@ -34,7 +46,12 @@ function Elimination({ isELiminated, isAdmin, socket, socketInfo }) {
           <button
             className="primary-button"
             onClick={() => {
-              socket.emit("nextRound");
+              try {
+                socket.emit("nextRound");
+              } catch (err) {
+                console.error("Error starting next round:", err);
+                alert(`Failed to start next round: ${err.message || err}`);
+              }
             }}
           >
             Next Round

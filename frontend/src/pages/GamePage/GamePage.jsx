@@ -21,6 +21,7 @@ function GamePage({ socket, socketInfo, setSocketInfo }) {
       console.log(response.data);
     } catch (err) {
       console.error(err);
+      alert(`Failed to fetch game info: ${err.response?.data || err.message || err}`);
     }
   };
   useState(() => {
@@ -38,6 +39,10 @@ function GamePage({ socket, socketInfo, setSocketInfo }) {
     });
     socket.on("eliminated", () => {
       setIsEliminated(true);
+    });
+    socket.on("error", (error) => {
+      console.error("Game error:", error);
+      alert(`Game Error: ${error}`);
     });
   }, [socket]);
 

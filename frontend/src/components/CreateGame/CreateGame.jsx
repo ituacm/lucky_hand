@@ -10,7 +10,13 @@ function CreateGame({ socket, setIsJoining }) {
     const gameName = gameNameRef.current.value;
     const playerName = playerNameRef.current.value;
     console.log(gameName, playerName);
-    socket.emit("createGame", { gameName: gameName, playerName: playerName });
+    
+    try {
+      socket.emit("createGame", { gameName: gameName, playerName: playerName });
+    } catch (err) {
+      console.error("Error creating game:", err);
+      alert(`Failed to create game: ${err.message || err}`);
+    }
   };
 
   return (

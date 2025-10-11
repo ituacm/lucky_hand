@@ -17,6 +17,7 @@ function WaitingRoom({ socket, socketInfo, isAdmin }) {
       setGameInfo(gameInfoResponse.data);
     } catch (err) {
       console.error(err);
+      alert(`Failed to fetch game data: ${err.response?.data || err.message || err}`);
     }
   };
   useEffect(() => {
@@ -30,9 +31,15 @@ function WaitingRoom({ socket, socketInfo, isAdmin }) {
 
     socket.on("playerJoined", handlePlayersChanged);
     socket.on("playerLeft", handlePlayersChanged);
+    socket.on("error", (error) => {
+      console.error("Waiting room error:", error);
+      alert(`Waiting Room Error: ${error}`);
+    });
 
     return () => {
       socket.off("playerJoined", handlePlayersChanged);
+      socket.off("playerLeft", handlePlayersChanged);
+      socket.off("error");
     };
   }, [socket]);
 
@@ -53,7 +60,12 @@ function WaitingRoom({ socket, socketInfo, isAdmin }) {
           <button
             className="waiting-room-start-game"
             onClick={() => {
-              socket.emit("startGame");
+              try {
+                socket.emit("startGame");
+              } catch (err) {
+                console.error("Error starting game:", err);
+                alert(`Failed to start game: ${err.message || err}`);
+              }
             }}
           >
             Start Game

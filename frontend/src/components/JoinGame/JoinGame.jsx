@@ -10,7 +10,13 @@ function JoinGame({ socket, setIsJoining }) {
     const gameId = gameIdRef.current.value;
     const playerName = playerNameRef.current.value;
     console.log(gameId, playerName);
-    socket.emit("joinGame", { gameId: gameId, playerName: playerName });
+    
+    try {
+      socket.emit("joinGame", { gameId: gameId, playerName: playerName });
+    } catch (err) {
+      console.error("Error joining game:", err);
+      alert(`Failed to join game: ${err.message || err}`);
+    }
   };
 
   return (
