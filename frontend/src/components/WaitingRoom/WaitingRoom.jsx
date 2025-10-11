@@ -5,6 +5,7 @@ import ListPlayers from "../ListPlayers/ListPlayers";
 
 function WaitingRoom({ socket, socketInfo, isAdmin }) {
   const [players, setPlayers] = useState([]);
+  const [gameInfo, setGameInfo] =useState({});
 
   const fetchPlayers = async () => {
     try {
@@ -12,6 +13,8 @@ function WaitingRoom({ socket, socketInfo, isAdmin }) {
         `${import.meta.env.VITE_BACKEND_URL}/games/${socketInfo.gameId}/players`
       );
       setPlayers(response.data);
+      const gameInfoResponse = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/games/${socketInfo.gameId}`);
+      setGameInfo(gameInfoResponse.data);
     } catch (err) {
       console.error(err);
     }
@@ -36,7 +39,7 @@ function WaitingRoom({ socket, socketInfo, isAdmin }) {
   return (
     <div className="waiting-room-container">
       <p className="waiting-room-text">Welcome to the room:</p>
-      <h1 className="waiting-room-header">OYUN</h1>
+      <h1 className="waiting-room-header">{gameInfo.name}</h1>
       <h2 className="waiting-room-header">{socketInfo.gameId}</h2>
       <p className="waiting-room-text">
         Share this id with your friends to join the game!
