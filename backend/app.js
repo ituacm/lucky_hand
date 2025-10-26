@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://127.0.0.1:5173", "http://localhost:5173", "https://luckyhand.ituacm.com"],
+    origin: ["https://luckyhand.ituacm.com"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
@@ -21,7 +21,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://127.0.0.1:5173", "http://localhost:5173", "https://luckyhand.ituacm.com"],
+    origin: ["https://luckyhand.ituacm.com"],
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true,
