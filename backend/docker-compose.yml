@@ -5,6 +5,8 @@ services:
   luckyhand-api:
     build: .
     container_name: luckyhand-api
+    mem_limit: 512m
+    mem_reservation: 128m
     restart: unless-stopped
     env_file: .env
     ports:
